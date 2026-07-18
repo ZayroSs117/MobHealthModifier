@@ -1,4 +1,4 @@
-name: Build and test
+name: Build
 
 on:
   push:
@@ -20,11 +20,16 @@ jobs:
           distribution: temurin
           java-version: "17"
 
-      - name: Run tests
-        run: bash test.sh
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.1.1"
+
+      - name: Build the Forge mod
+        run: gradle build --no-daemon
 
       - name: Upload the server JAR
         uses: actions/upload-artifact@v4
         with:
           name: hostile-mob-health-multiplier-1.0.3
-          path: build/hostile-mob-health-multiplier-1.0.3.jar
+          path: build/libs/hostile-mob-health-multiplier-1.0.3.jar
