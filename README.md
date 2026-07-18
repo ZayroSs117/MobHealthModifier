@@ -2,7 +2,7 @@
 
 Mod **Forge 1.20.1 côté serveur** permettant de multiplier la vie maximale des mobs hostiles, y compris la majorité des mobs hostiles ajoutés par des mods.
 
-La version actuelle est **1.0.3**.
+Version actuelle : **1.0.3**.
 
 ## Fonctionnement
 
@@ -12,7 +12,7 @@ Sont concernés :
 
 - monstres vanilla ;
 - boss hostiles ;
-- la majorité des mobs hostiles moddés correctement déclarés.
+- majorité des mobs hostiles moddés correctement déclarés.
 
 Ne sont pas modifiés :
 
@@ -50,8 +50,6 @@ Configuration par défaut :
 multiplier=2.0
 ```
 
-Exemples :
-
 | Valeur | Résultat |
 |---:|---|
 | `1.0` | Vie vanilla |
@@ -74,53 +72,51 @@ Les commandes nécessitent le niveau de permission OP 2 :
 /mobhealth config
 ```
 
-### Détail
-
 - `/mobhealth` ou `/mobhealth get` : affiche le multiplicateur actif.
-- `/mobhealth set 1.5` : enregistre la nouvelle valeur et l'applique immédiatement aux mobs hostiles chargés.
-- `/mobhealth reload` : relit le fichier de configuration et applique la valeur sans redémarrer.
-- `/mobhealth apply` : réapplique le multiplicateur actuel aux mobs hostiles suivis.
+- `/mobhealth set 1.5` : enregistre la valeur et l'applique immédiatement aux mobs hostiles chargés.
+- `/mobhealth reload` : relit le fichier de configuration sans redémarrer.
+- `/mobhealth apply` : réapplique le multiplicateur actuel aux mobs suivis.
 - `/mobhealth config` : affiche le chemin absolu du fichier de configuration.
 
 Lorsque le multiplicateur change, le mod conserve le **pourcentage de vie actuel** du mob.
 
-Exemple : un mob à 50 % de sa vie restera à 50 % après le changement du multiplicateur.
-
 ## Sécurité contre le cumul
 
-Le mod utilise un UUID fixe pour son modificateur de vie. L'ancien modificateur est supprimé avant l'application du nouveau, ce qui empêche la vie de se multiplier plusieurs fois lors d'un changement de dimension ou d'un rechargement.
+Le mod utilise un UUID fixe pour son modificateur de vie. L'ancien modificateur est supprimé avant l'application du nouveau, ce qui évite de multiplier plusieurs fois la vie lors d'un changement de dimension ou d'un rechargement.
 
 ## Compilation
 
-Le projet contient un système de compilation autonome basé sur Java 17 et des stubs de l'API Forge/Minecraft.
+Le projet utilise **ForgeGradle 6**, les mappings officiels Minecraft 1.20.1 et Forge 47.4.21.
 
-Sous Linux :
+Prérequis :
+
+- Java 17 ;
+- Gradle 8.1.1.
+
+Commande :
 
 ```bash
-chmod +x build.sh test.sh
-./build.sh
+gradle build --no-daemon
 ```
 
-Le JAR est généré dans :
+Le JAR remappé pour un serveur Forge est généré dans :
 
 ```text
-build/hostile-mob-health-multiplier-1.0.3.jar
+build/libs/hostile-mob-health-multiplier-1.0.3.jar
 ```
 
-## Tests
+Un workflow GitHub Actions compile également le projet et publie le JAR comme artefact à chaque modification de la branche `main`.
 
-```bash
-./test.sh
+## Structure
+
+```text
+src/main/java/io/github/zayross117/mobhealthmultiplier/MobHealthMultiplier.java
+src/main/resources/META-INF/mods.toml
+src/main/resources/pack.mcmeta
+build.gradle
+gradle.properties
+settings.gradle
 ```
-
-Les tests vérifient notamment :
-
-- la création du fichier de configuration ;
-- l'application aux mobs hostiles ;
-- l'absence de cumul ;
-- l'exclusion des joueurs et mobs passifs ;
-- les commandes `get`, `set`, `reload`, `apply` et `config` ;
-- le refus des commandes pour un joueur non OP.
 
 ## Licence
 
